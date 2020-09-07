@@ -5,7 +5,6 @@ let @p = "ciWprint()P" "enclose W in print()
 let @d = "yi)ciW0" "delete all parenthesis around token
 
 " testing vim-fugtive single line staging functionality
-" dont stage this line
 
 "paste current file name
 let @f=":put =expand('%:r')"

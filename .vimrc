@@ -92,6 +92,7 @@ set omnifunc=syntaxcomplete#Complete
 set completefunc=syntaxcomplete#Complete
 set completeopt=menuone,preview,noselect,noinsert
 set dictionary+=/usr/share/dict/british-english "setup dictionary completion
+inoremap <C-Space> <C-x><C-u>
 
 "open preview below
 set splitbelow
@@ -144,14 +145,14 @@ call plug#end()
 "------
 let g:lsc_hover_popup = v:false
 let g:lsc_enable_diagnostics = v:false          " let ale do the linting
-set completefunc = "lsc#complete#complete"
-inoremap <C-Space> <C-x><C-u>
 let g:lsc_server_commands = {
             \'python': 'jedi-language-server',
             \}
 " Note: for list of language servers, see....
 " https://github.com/neovim/nvim-lspconfig#jedi_language_server
 "
+
+
 
 " Use all the defaults (recommended):
 let g:lsc_auto_map = v:true
@@ -284,9 +285,9 @@ set spelllang=en_gb
 " set spelllang=~/.vim/british-english.utf-8.spl  " mksp ~/.vim/british-english /usr/share/dict/british-english
 
 " set basic colorscheme
-set background=light
+set background=dark
 set termguicolors
-colorscheme PaperColor
+colorscheme onedark
 
 " highlight (likely unintended) repeated phrases (e.g., the the), with the :Rep command
 command Rep /\(\<.\+\>\)\_s*\<\1\>
@@ -328,6 +329,7 @@ augroup FileType python
     au!
     " au FileType python match ErrorMsg /\%>80v.\+/ 
     au FileType python setlocal colorcolumn=80
+    au FileType python setlocal completefunc = "lsc#complete#complete"
 augroup END
 
 augroup FileType tex

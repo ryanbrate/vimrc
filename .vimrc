@@ -4,8 +4,6 @@ let @l = "ciWlist()P" "enclose W in list()
 let @p = "ciWprint()P" "enclose W in print()
 let @d = "yi)ciW0" "delete all parenthesis around token
 
-" testing vim-fugtive single line staging functionality
-
 "paste current file name
 let @f=":put =expand('%:r')"
 
@@ -149,7 +147,7 @@ let g:lsc_enable_diagnostics = v:false          " let ale do the linting
 set completefunc = "lsc#complete#complete"
 inoremap <C-Space> <C-x><C-u>
 let g:lsc_server_commands = {
-            \'python': 'jedi-language-server'
+            \'python': 'jedi-language-server',
             \}
 " Note: for list of language servers, see....
 " https://github.com/neovim/nvim-lspconfig#jedi_language_server

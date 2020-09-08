@@ -1,8 +1,5 @@
-"saved macro
+"saved macro example
 " let @s="1:w >> removed_line.txt\<CR>d1d"
-let @l = "ciWlist()P" "enclose W in list()
-let @p = "ciWprint()P" "enclose W in print()
-let @d = "yi)ciW0" "delete all parenthesis around token
 
 "cnext, cprevious shortcuts. e.g., for Glog
 nnoremap ]q :cnext<CR>

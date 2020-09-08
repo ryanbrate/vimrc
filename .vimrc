@@ -1,9 +1,11 @@
 "saved macro example
 " let @s="1:w >> removed_line.txt\<CR>d1d"
 
-"cnext, cprevious shortcuts. e.g., for Glog
+"cnext, cprevious shortcuts. e.g., for Glog, inspired by unimpaired
 nnoremap ]q :cnext<CR>
+nnoremap ]Q :clast<CR>
 nnoremap [q :cprevious<CR>
+nnoremap [Q :cfirst<CR>
 
 "paste current file name
 let @f=":put! =expand('%:r')"

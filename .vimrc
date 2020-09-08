@@ -4,11 +4,15 @@ let @l = "ciWlist()P" "enclose W in list()
 let @p = "ciWprint()P" "enclose W in print()
 let @d = "yi)ciW0" "delete all parenthesis around token
 
+"cnext, cprevious shortcuts. e.g., for Glog
+nnoremap ]q :cnext<CR>
+nnoremap [q :cprevious<CR>
+
 "paste current file name
-let @f=":put =expand('%:r')"
+let @f=":put! =expand('%:r')"
 
 " turn off beep
-:set vb t_vb=
+set vb t_vb=
 
 "persistent undo settings
 set undofile
@@ -76,7 +80,7 @@ set wildignore+=*.blg,*.fls,*.bbl,*.aux,*fdb_latexmk,*.pygtex,*.pygstyle "latex 
 
 set nocompatible "turn off enforced vi compatibility
 set foldmethod=indent
-" set foldlevel=1
+set foldlevelstart=1000
 filetype plugin indent on
 set smarttab "tab in insert mode, inserts shiftwidth of spaces
 set backspace=indent,eol,start
@@ -111,7 +115,6 @@ let g:tex_comment_nospell=1
 
 "open a html link (in browser) with gx
 let g:netrw_browsex_viewer="setsid xdg-open"
-
 
 "----------------------
 " vim-plug plugin manager from https://github.com/junegunn/vim-plug
@@ -150,9 +153,6 @@ let g:lsc_server_commands = {
             \}
 " Note: for list of language servers, see....
 " https://github.com/neovim/nvim-lspconfig#jedi_language_server
-"
-
-
 
 " Use all the defaults (recommended):
 let g:lsc_auto_map = v:true

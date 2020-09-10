@@ -143,6 +143,11 @@ Plug 'vim-airline/vim-airline'
 call plug#end()
 
 "------
+" fugitive
+"------
+nnoremap <Leader>gl :Git log --oneline --graph --all --decorate<CR>
+
+"------
 " vim-lsc
 "------
 let g:lsc_hover_popup = v:false
@@ -284,9 +289,9 @@ set spelllang=en_gb
 " set spelllang=~/.vim/british-english.utf-8.spl  " mksp ~/.vim/british-english /usr/share/dict/british-english
 
 " set basic colorscheme
-set background=dark
 set termguicolors
-colorscheme onedark
+set background=dark
+colorscheme gruvbox
 
 " highlight (likely unintended) repeated phrases (e.g., the the), with the :Rep command
 command Rep /\(\<.\+\>\)\_s*\<\1\>

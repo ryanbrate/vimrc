@@ -10,6 +10,11 @@ nnoremap [Q :cfirst<CR>
 "paste current file name
 let @f=":put! =expand('%:r')"
 
+"Gvim font
+if has('gui_running')
+    set guifont=Ubuntu\ Mono\ 12
+endif
+
 " turn off beep
 set vb t_vb=
 
@@ -290,8 +295,8 @@ set spelllang=en_gb
 
 " set basic colorscheme
 set termguicolors
-set background=dark
-colorscheme gruvbox
+" set background=light
+colorscheme github
 
 " highlight (likely unintended) repeated phrases (e.g., the the), with the :Rep command
 command Rep /\(\<.\+\>\)\_s*\<\1\>

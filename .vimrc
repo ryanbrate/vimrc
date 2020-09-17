@@ -3,8 +3,20 @@
 " 3) Default functionality & interactions are preferred.
 " 4) Plugins die, developers get bored. Avoid lock in.
 
+set encoding=utf-8
+
+" case options
+set ignorecase
+set smartcase
+
+"change the leader key
+let mapleader = ","
+
 "saved macro example
 " let @s="1:w >> removed_line.txt\<CR>d1d"
+
+"registers
+let @f=":put! =expand('%:r')"
 
 " abbreviations global
 cabbrev dir %:p:h
@@ -16,17 +28,20 @@ nnoremap ]Q :clast<CR>
 nnoremap [q :cprevious<CR>
 nnoremap [Q :cfirst<CR>
 
-" highlight (likely unintended) repeated phrases (e.g., the the), with the :Rep command
-command Rep /\(\<.\+\>\)\_s*\<\1\>
-
 " highlight those words that tend to get miss-typed
 let s:tricky_words = ["its", "it's", 
             \"there", "their", "they're",
             \"your", "you're",
             \"were", "we're", "where", 
-            \"too", "to"
             \]
-command Tky exec '/\(' . join(s:tricky_words, '\|') .'\)'
+command Tky exec '/\(' . join(s:tricky_words, '\|') . '\)' 
+
+" print a timestamp
+command Timestamp put =strftime(\"%c\")
+
+" highlight (likely unintended) repeated consecutive words
+command Rep /\(\<\w\+\>\)\_s*\<\1\>
+
 
 "---
 " Tab creation/deletion/navigation
@@ -67,8 +82,6 @@ set showtabline=2
 " all the cool kids do this, apparently
 set lazyredraw
 
-set encoding=utf-8
-
 "set minimum number of lines above/below cursor on screen
 set scrolloff=1 
 
@@ -103,14 +116,11 @@ set showmatch
 "search options
 set incsearch           " search as characters are entered
 set hlsearch            " highlight matches
-set ignorecase
-set smartcase
 
 "statusbar
 set laststatus=2                       " Shows status bar on 2nd to last line
 set statusline=%f                      " Show path in status bar (relative, %F for absolute)
 
-"extra settings from ....vim video
 set path=.,,
 " set path+=** "for recursive file searching using :find 
 set wildmenu "tab completion of file search
@@ -118,7 +128,6 @@ set wildmode=longest:full,full
 set wildignore+=tags,*.pyc "invisible to wildmenu and netrw
 set wildignore+=*.blg,*.fls,*.bbl,*.aux,*fdb_latexmk,*.pygtex,*.pygstyle "latex file ignore
 
-set nocompatible "turn off enforced vi compatibility
 set foldmethod=indent
 set foldlevelstart=1000
 filetype plugin indent on
@@ -127,9 +136,6 @@ set backspace=indent,eol,start
 
 "set (buffer) working path to current file location
 set autochdir
-
-"change the leader key
-let mapleader = ","
 
 "set up completion 
 set omnifunc=syntaxcomplete#Complete
@@ -192,7 +198,7 @@ nnoremap <Leader>gl :Git log --oneline --graph --all --decorate<CR>
 let g:lsc_hover_popup = v:false
 let g:lsc_enable_diagnostics = v:false          " let ale do the linting
 let g:lsc_server_commands = {
-            \'python': 'jedi-language-server',
+            \'python': 'pyls',
             \}
 " Note: for list of language servers, see....
 " https://github.com/neovim/nvim-lspconfig#jedi_language_server
@@ -332,11 +338,9 @@ set termguicolors
 " set background=light
 colorscheme github
 
-
 "---
 " new buffer (doc) settings
 "---
-
 augroup FileType *
     au!
     au FileType * match none "clear previous highlighted matches in new buffer
@@ -349,7 +353,6 @@ augroup END
 
 augroup FileType python 
     au!
-    " au FileType python match ErrorMsg /\%>80v.\+/ 
     au FileType python setlocal colorcolumn=80
     au FileType python setlocal completefunc = "lsc#complete#complete"
 augroup END
@@ -367,13 +370,7 @@ augroup FileType tex
     
     au FileType tex :setlocal spell
 
-    " (saved as execute example - but can be done as map directly)
-    " function! Ntext_bold()
-    "     :execute "normal ciw\\textbf{\<esc>pa}"
-    " endfunction
-
     "wrap token (or visual select) with \textbf{}
-    " gv denotes visual selection
     au Filetype tex nnoremap <buffer> ,tb :normal ciw\textbf{<esc>pa}<esc>
     au Filetype tex vnoremap <buffer> ,tb :normal gvc\textbf{<esc>pa}<esc>
 
@@ -385,25 +382,16 @@ augroup FileType tex
     au Filetype tex nnoremap <buffer> ,tu :normal ciw\underline{<esc>pa}<esc>
     au Filetype tex vnoremap <buffer> ,tu :normal gvc\underline{<esc>pa}<esc>
 
-    "find word repetitions
-    " au FileType tex match ErrorMsg /\(\<\w\+\>\)\_s*\<\1\>/
-
-    " find sequence repetitions
-    " au FileType tex match ErrorMsg /\(\<.\+\>\)\_s*\<\1\>/
-
 augroup END
 
+" settings when email app calls vim as an external editor
 augroup FileType email
     au!
-    " au Filetype email iabbrev <buffer> sig Kind regards,<cr><cr>Ryan
+    au Filetype email iabbrev <buffer> sig Kind regards,<cr><cr>Ryan
 
     au FileType email :setlocal spell
     
-    " find word repetitions
-    " au FileType email match ErrorMsg /\(\<\w\+\>\)\_s*\<\1\>/
-    
-    " find sequence repetitions
-    au FileType email match ErrorMsg /\(\<.\+\>\)\_s*\<\1\>/
+    au FileType email match ErrorMsg /\(\<\w\+\>\)\_s*\<\1\>/
 
 augroup END
 
@@ -428,10 +416,4 @@ augroup FileType vimwiki
     au Filetype vimwiki nnoremap <buffer> ,ti :normal ciw__<esc>P
     au Filetype vimwiki vnoremap <buffer> ,ti :normal gvc__<esc>P
 
-
-    " find word repetitions
-    " au FileType vimwiki match ErrorMsg /\(\<\w\+\>\)\_s*\<\1\>/
-
-    " find sequence repetitions
-    " au FileType vimwiki match ErrorMsg /\(\<.\+\>\)\_s*\<\1\>/
 augroup END

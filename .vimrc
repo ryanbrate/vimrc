@@ -1,15 +1,51 @@
+" philosophy
+" 1) commands >> maps  2) Keep abbreviations to a select few only 
+" 3) Default functionality & interactions are preferred.
+" 4) Plugins die, developers get bored. Avoid lock in.
+
 "saved macro example
 " let @s="1:w >> removed_line.txt\<CR>d1d"
 
-"cnext, cprevious shortcuts. e.g., for Glog, inspired by unimpaired
+" abbreviations global
+cabbrev dir %:p:h
+cabbrev vg vimgrep
+  
+"quickfix window mapping, inspired by unimpaired
 nnoremap ]q :cnext<CR>
 nnoremap ]Q :clast<CR>
 nnoremap [q :cprevious<CR>
 nnoremap [Q :cfirst<CR>
 
-"paste current file name
-let @f=":put! =expand('%:r')"
+" highlight (likely unintended) repeated phrases (e.g., the the), with the :Rep command
+command Rep /\(\<.\+\>\)\_s*\<\1\>
 
+" highlight those words that tend to get miss-typed
+let s:tricky_words = ["its", "it's", 
+            \"there", "their", "they're",
+            \"your", "you're",
+            \"were", "we're", "where", 
+            \"too", "to"
+            \]
+command Tky exec '/\(' . join(s:tricky_words, '\|') .'\)'
+
+"---
+" Tab creation/deletion/navigation
+"---
+nnoremap <Leader>tn :tabnew<CR>
+nnoremap <Leader>tc :tabclose<CR>
+
+nnoremap <Leader>1 1gt
+nnoremap <Leader>2 2gt
+nnoremap <Leader>3 3gt
+nnoremap <Leader>4 4gt
+nnoremap <Leader>5 5gt
+nnoremap <Leader>6 6gt
+nnoremap <Leader>7 7gt
+nnoremap <Leader>8 8gt
+nnoremap <Leader>9 9gt 
+
+"paste current file name
+"
 "Gvim font
 if has('gui_running')
     set guifont=Ubuntu\ Mono\ 12
@@ -89,7 +125,7 @@ filetype plugin indent on
 set smarttab "tab in insert mode, inserts shiftwidth of spaces
 set backspace=indent,eol,start
 
-"set working path to current file location
+"set (buffer) working path to current file location
 set autochdir
 
 "change the leader key
@@ -125,14 +161,12 @@ let g:netrw_browsex_viewer="setsid xdg-open"
 "----------------------
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-surround'
 Plug 'vimwiki/vimwiki'
 " Plug 'majutsushi/tagbar'
-Plug 'SirVer/ultisnips' 
+Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-vinegar'
+" Plug 'tpope/vim-vinegar'
 Plug 'lervag/vimtex'
 " Plug 'ludovicchabant/vim-gutentags'
 Plug 'simnalamburt/vim-mundo'
@@ -298,27 +332,6 @@ set termguicolors
 " set background=light
 colorscheme github
 
-" highlight (likely unintended) repeated phrases (e.g., the the), with the :Rep command
-command Rep /\(\<.\+\>\)\_s*\<\1\>
-
-" highlight where inadequate spaces between lists
-command ListFormat /\w\(,\|\.\|\:\|\;\)\+\w
-
-"---
-" Tab creation/deletion/navigation
-"---
-nnoremap <Leader>tn :tabnew<CR>
-nnoremap <Leader>tc :tabclose<CR>
-
-nnoremap <Leader>1 1gt
-nnoremap <Leader>2 2gt
-nnoremap <Leader>3 3gt
-nnoremap <Leader>4 4gt
-nnoremap <Leader>5 5gt
-nnoremap <Leader>6 6gt
-nnoremap <Leader>7 7gt
-nnoremap <Leader>8 8gt
-nnoremap <Leader>9 9gt 
 
 "---
 " new buffer (doc) settings
@@ -406,12 +419,6 @@ augroup FileType vimwiki
 
     au FileType vimwiki :setlocal spell
     " setlocal nospell 
-
-    "functions mapped
-    au Filetype vimwiki nnoremap <buffer> <Leader>ls :VWS 
-    au Filetype vimwiki nnoremap <buffer> <Leader>lo :lopen<CR> 
-    au Filetype vimwiki nnoremap <buffer> <Leader>ln :lnext<CR> 
-    au Filetype vimwiki nnoremap <buffer> <Leader>lp :lprevious<CR> 
 
     "make text or visual selection bold
     au Filetype vimwiki nnoremap <buffer> ,tb :normal ciw**<esc>P

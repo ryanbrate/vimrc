@@ -1,5 +1,5 @@
 " philosophy
-" 1) commands >> maps  2) Keep abbreviations to a select few only 
+" 1) commands >> maps  2) Keep abbreviations to a select few only (filetype specific)
 " 3) Default functionality & interactions are preferred.
 " 4) Plugins die, developers get bored. Avoid lock in.
 
@@ -15,8 +15,9 @@ let mapleader = ","
 "saved macro example
 " let @s="1:w >> removed_line.txt\<CR>d1d"
 
-"registers
-let @f=":put! =expand('%:r')"
+"macros assigned to registers
+let @f="put! =expand('%:r')"
+let @t='a=strftime("%c")'  " using the expression (=) register to evaluate 
 
 " abbreviations global
 cabbrev dir %:p:h
@@ -41,7 +42,6 @@ command Timestamp put =strftime(\"%c\")
 
 " highlight (likely unintended) repeated consecutive words
 command Rep /\(\<\w\+\>\)\_s*\<\1\>
-
 
 "---
 " Tab creation/deletion/navigation

@@ -16,18 +16,17 @@ let mapleader = ","
 " let @s="1:w >> removed_line.txt\<CR>d1d"
 
 "macros assigned to registers
-let @f="put! =expand('%:r')"
-let @t='a=strftime("%c")'  " using the expression (=) register to evaluate 
+let @f="a=expand('%:r')" 
+let @t='a=strftime("%c")'   " using the expression (=) register to evaluate 
 
 " abbreviations global
-cabbrev dir %:p:h
 cabbrev vg vimgrep
   
 "quickfix window mapping, inspired by unimpaired
-nnoremap ]q :cnext<CR>
-nnoremap ]Q :clast<CR>
-nnoremap [q :cprevious<CR>
-nnoremap [Q :cfirst<CR>
+" nnoremap ]q :cnext<CR>
+" nnoremap ]Q :clast<CR>
+" nnoremap [q :cprevious<CR>
+" nnoremap [Q :cfirst<CR>
 
 " highlight those words that tend to get miss-typed
 let s:tricky_words = ["its", "it's", 
@@ -38,7 +37,7 @@ let s:tricky_words = ["its", "it's",
 command Tky exec '/\(' . join(s:tricky_words, '\|') . '\)' 
 
 " print a timestamp
-command Timestamp put =strftime(\"%c\")
+" command Timestamp put =strftime(\"%c\")
 
 " highlight (likely unintended) repeated consecutive words
 command Rep /\(\<\w\+\>\)\_s*\<\1\>
@@ -144,6 +143,10 @@ set completeopt=menuone,preview,noselect,noinsert
 set dictionary+=/usr/share/dict/british-english "setup dictionary completion
 inoremap <C-Space> <C-x><C-u>
 
+" for spell checking i.e. set spell
+set spelllang=en_gb
+" set spelllang=~/.vim/british-english.utf-8.spl  " mksp ~/.vim/british-english /usr/share/dict/british-english
+
 "open preview below
 set splitbelow
 
@@ -167,22 +170,17 @@ let g:netrw_browsex_viewer="setsid xdg-open"
 "----------------------
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-unimpaired'
 Plug 'vimwiki/vimwiki'
-" Plug 'majutsushi/tagbar'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'tpope/vim-fugitive'
-" Plug 'tpope/vim-vinegar'
 Plug 'lervag/vimtex'
-" Plug 'ludovicchabant/vim-gutentags'
 Plug 'simnalamburt/vim-mundo'
 Plug 'dense-analysis/ale'
-" Plug 'tmhedberg/SimpylFold'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install() } } 
 Plug 'junegunn/fzf.vim'
-" Plug 'davidhalter/jedi-vim'
 Plug 'rafi/awesome-vim-colorschemes'
-" Plug 'ycm-core/YouCompleteMe'
 Plug 'natebosch/vim-lsc'
 Plug 'vim-airline/vim-airline'
 call plug#end()
@@ -198,7 +196,7 @@ nnoremap <Leader>gl :Git log --oneline --graph --all --decorate<CR>
 let g:lsc_hover_popup = v:false
 let g:lsc_enable_diagnostics = v:false          " let ale do the linting
 let g:lsc_server_commands = {
-            \'python': 'pyls',
+            \'python': 'jedi-language-server',
             \}
 " Note: for list of language servers, see....
 " https://github.com/neovim/nvim-lspconfig#jedi_language_server
@@ -212,7 +210,6 @@ let g:lsc_auto_map = {'defaults': v:true, 'FindReferences': '<leader>r'}
 " Setting a value to a blank string leaves that command unmapped:
 let g:lsc_auto_map = {'defaults': v:true, 'FindImplementations': ''}
 
-" ... or set only the commands you want mapped without defaults.
 " Complete default mappings are:
 let g:lsc_auto_map = {
     \ 'GoToDefinition': '<C-]>',
@@ -245,12 +242,6 @@ nnoremap <Leader>fs :FzfSnippets<CR>
 let g:fzf_command_prefix = 'Fzf'
 
 "------
-" SimplyFold
-"------
-" let g:SimpylFold_docstring_preview = 1
-" let g:SimpylFold_fold_docstring = 0
-
-"------
 " ale
 "------
 let g:ale_linters_explicit = 1
@@ -261,45 +252,18 @@ nnoremap <Leader>af :ALEFix<CR>
 " disable ale from interferring with vimwiki search
 " let g:ale_pattern_options = {'.*\.wiki': {'ale_enabled': 0}}
 
-""------
-"" ycm
-""------
-" let g:ycm_filetype_whitelist  = {'python' : 1, 'tex' : 1, 'vim' : 1, 'golang' : 1}
-" let g:ycm_semantic_triggers = {'python' : ['.'], 'tex' : ['{'], 'golang' : ['.']}
-" let g:ycm_auto_hover=''
-
-" nnoremap <buffer> <S-k> :YcmCompleter GetDoc<cr> 
-" nnoremap <buffer> <S-t> :YcmCompleter GetType<cr> 
-" nnoremap <buffer> <c-]> :YcmCompleter GoTo<cr> 
-
-" ------
-" gutentags 
-" ------
-" set statusline+=%{gutentags#statusline()} "notify when updating
-" let g:gutentags_project_root = ["tags"] "starts working if tags file present
-
 "------
 " vim-mundo, persistent undo viewer
 "------
 nnoremap <F5> :MundoToggle<CR>
 
 "------
-" netrw + vinegre; don't show hidden files on open
-"------
-let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+'
-
-" ------
-"  tagbar binding (recommended)
-" ------
-" nmap <F8> :TagbarToggle<CR>
-
-"------
 " ultisnips
 "------
 " let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsExpandTrigger="<c-j>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:ultisnips_python_style = "google"
 
 " If you want :UltiSnipsEdit to split your window.
@@ -321,18 +285,29 @@ let g:vimtex_compiler_latexmk = {
     \ ]
     \}
 
+"------
+" vimwiki
+"------
+"
 " setup template for vimwiki - taken from https://www.rosipov.com/blog/custom-templates-in-vimwiki/ 
 "(allowed for added mathjax to default headers in order to support equations)
 let g:vimwiki_list = [{
   \ 'path': '$HOME/vimwiki',
+  \ 'auto_tags': 1,
+  \ 'auto_diary_index': 1,
+  \ 'auto_generate_links': 1,
+  \ 'auto_export': 1,
   \ 'template_path': '$HOME/vimwiki/templates',
   \ 'template_default': 'default',
   \ 'template_ext': '.html'}]
 
-" for spell checking i.e. set spell
-set spelllang=en_gb
-" set spelllang=~/.vim/british-english.utf-8.spl  " mksp ~/.vim/british-english /usr/share/dict/british-english
+let g:vimwiki_auto_header = 1
 
+cabbrev VWST VimwikiSearchTags
+
+" ------
+"  colorscheme
+" ------
 " set basic colorscheme
 set termguicolors
 " set background=light

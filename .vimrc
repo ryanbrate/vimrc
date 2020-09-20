@@ -12,22 +12,14 @@ set smartcase
 "change the leader key
 let mapleader = ","
 
-"saved macro example
-" let @s="1:w >> removed_line.txt\<CR>d1d"
-
 "macros assigned to registers
+" let @s="1:w >> removed_line.txt\<CR>d1d"
 let @f="a=expand('%:r')" 
 let @t='a=strftime("%c")'   " using the expression (=) register to evaluate 
 
 " abbreviations global
 cabbrev vg vimgrep
   
-"quickfix window mapping, inspired by unimpaired
-" nnoremap ]q :cnext<CR>
-" nnoremap ]Q :clast<CR>
-" nnoremap [q :cprevious<CR>
-" nnoremap [Q :cfirst<CR>
-
 " highlight those words that tend to get miss-typed
 let s:tricky_words = ["its", "it's", 
             \"there", "their", "they're",
@@ -35,9 +27,6 @@ let s:tricky_words = ["its", "it's",
             \"were", "we're", "where", 
             \]
 command Tky exec '/\(' . join(s:tricky_words, '\|') . '\)' 
-
-" print a timestamp
-" command Timestamp put =strftime(\"%c\")
 
 " highlight (likely unintended) repeated consecutive words
 command Rep /\(\<\w\+\>\)\_s*\<\1\>

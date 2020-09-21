@@ -3,6 +3,13 @@
 " 3) Default functionality & interactions are preferred.
 " 4) Plugins die, developers get bored. Avoid lock in.
 
+" autoload .vim files in the current directory - handy for project specific
+" scripts
+let s:current_dir = expand("%:p:h")
+for f in split(glob(s:current_dir . '/*.vim'), '\n')
+    exec 'source' f
+endfor 
+
 set encoding=utf-8
 
 " case options
@@ -21,15 +28,15 @@ let @t='a=strftime("%c")'   " using the expression (=) register to evaluate
 cabbrev vg vimgrep
   
 " highlight those words that tend to get miss-typed
-let s:tricky_words = ["its", "it's", 
+let s:mistakes = ["its", "it's", 
             \"there", "their", "they're",
             \"your", "you're",
             \"were", "we're", "where", 
             \]
-command Tky exec '/\(' . join(s:tricky_words, '\|') . '\)' 
+command Mistakes exec '/\(' . join(s:mistakes, '\|') . '\)' 
 
 " highlight (likely unintended) repeated consecutive words
-command Rep /\(\<\w\+\>\)\_s*\<\1\>
+command RepeatedWords /\(\<\w\+\>\)\_s*\<\1\>
 
 "---
 " Tab creation/deletion/navigation
@@ -60,6 +67,9 @@ set vb t_vb=
 "persistent undo settings
 set undofile
 set undodir=~/.vim/undodir "set bespoke persistent undo directory
+if !isdirectory(&undodir)
+    mkdir(&undodir) 
+endif 
 
 "auto update file view if changed outside of vim
 set autoread

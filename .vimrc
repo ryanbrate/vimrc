@@ -34,6 +34,9 @@ command Mistakes exec '/\(' . join(s:mistakes, '\|') . '\)'
 " highlight (likely unintended) repeated consecutive words
 command RepeatedWords /\(\<\w\+\>\)\_s*\<\1\>
 
+" always shows tab bar
+set showtabline=2
+
 "---
 " Tab creation/deletion/navigation
 "---
@@ -64,11 +67,8 @@ set vb t_vb=
 set undofile
 set undodir=~/.vim/undodir "set bespoke persistent undo directory
 if !isdirectory(&undodir)
-    mkdir(&undodir) 
+    call mkdir(&undodir) 
 endif 
-
-" always shows tab bar
-set showtabline=2
 
 " all the cool kids do this, apparently
 set lazyredraw

@@ -3,12 +3,8 @@
 " 3) Default functionality & interactions are preferred.
 " 4) Plugins die, developers get bored. Avoid lock in.
 
-" autoload .vim files in the current directory - handy for project specific
-" scripts
-let s:current_dir = expand("%:p:h")
-for f in split(glob(s:current_dir . '/*.vim'), '\n')
-    exec 'source' f
-endfor 
+"set (buffer) working path to current file location
+set autochdir
 
 set encoding=utf-8
 
@@ -71,9 +67,6 @@ if !isdirectory(&undodir)
     mkdir(&undodir) 
 endif 
 
-"auto update file view if changed outside of vim
-set autoread
-
 " always shows tab bar
 set showtabline=2
 
@@ -132,8 +125,8 @@ filetype plugin indent on
 set smarttab "tab in insert mode, inserts shiftwidth of spaces
 set backspace=indent,eol,start
 
-"set (buffer) working path to current file location
-set autochdir
+"auto update file view if changed outside of vim
+set autoread
 
 "set up completion 
 set omnifunc=syntaxcomplete#Complete
@@ -318,6 +311,7 @@ colorscheme github
 augroup FileType *
     au!
     au FileType * match none "clear previous highlighted matches in new buffer
+
 augroup End
 
 augroup Filetype r

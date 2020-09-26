@@ -1,12 +1,7 @@
-" philosophy
-" 1) commands >> maps  2) Keep abbreviations to a select few only (filetype specific)
-" 3) Default functionality & interactions are preferred.
-" 4) Plugins die, developers get bored. Avoid lock in.
+set encoding=utf-8
 
 "set (buffer) working path to current file location
 set autochdir
-
-set encoding=utf-8
 
 " case options
 set ignorecase
@@ -117,7 +112,7 @@ set path=.,,
 set wildmenu "tab completion of file search
 set wildmode=longest:full,full
 set wildignore+=tags,*.pyc "invisible to wildmenu and netrw
-set wildignore+=*.blg,*.fls,*.bbl,*.aux,*fdb_latexmk,*.pygtex,*.pygstyle "latex file ignore
+set wildignore+=*.blg,*.fls,*.bbl,*.aux,*fdb_latexmk,*.pygtex,*.pygstyle
 
 set foldmethod=indent
 set foldlevelstart=1000
@@ -163,6 +158,7 @@ let g:netrw_browsex_viewer="setsid xdg-open"
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-surround'
 Plug 'vimwiki/vimwiki'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -283,17 +279,40 @@ let g:vimtex_compiler_latexmk = {
 "
 " setup template for vimwiki - taken from https://www.rosipov.com/blog/custom-templates-in-vimwiki/ 
 "(allowed for added mathjax to default headers in order to support equations)
-let g:vimwiki_list = [{
+
+let wiki_1 = {
   \ 'path': '$HOME/vimwiki',
   \ 'auto_tags': 1,
   \ 'auto_diary_index': 1,
-  \ 'auto_generate_links': 1,
+  \ 'auto_generate_tags': 1,
   \ 'auto_export': 1,
   \ 'template_path': '$HOME/vimwiki/templates',
   \ 'template_default': 'default',
-  \ 'template_ext': '.html'}]
+  \ 'template_ext': '.html'}
 
-let g:vimwiki_auto_header = 1
+let wiki_2 = {
+  \ 'path': '$HOME/Diary',
+  \ 'auto_tags': 1,
+  \ 'auto_diary_index': 1,
+  \ 'auto_generate_tags': 1,
+  \ 'auto_export': 1,
+  \ 'template_path': '$HOME/Diary/templates',
+  \ 'template_default': 'default',
+  \ 'template_ext': '.html'}
+
+let wiki_3 = {
+  \ 'path': '$HOME/Github_Pages',
+  \ 'auto_tags': 1,
+  \ 'auto_diary_index': 1,
+  \ 'auto_generate_tags': 1,
+  \ 'auto_export': 1,
+  \ 'template_path': '$HOME/Github_Pages/templates',
+  \ 'template_default': 'default',
+  \ 'template_ext': '.html'}
+
+" let g:vimwiki_global_ext = 0  " turn off temporary wiki behaviour
+let g:vimwiki_auto_header = 1  " auto fill .wiki title
+let g:vimwiki_folding = 'list'
 
 cabbrev VWST VimwikiSearchTags
 
@@ -303,7 +322,7 @@ cabbrev VWST VimwikiSearchTags
 " set basic colorscheme
 set termguicolors
 " set background=light
-colorscheme github
+colorscheme solarized8
 
 "---
 " new buffer (doc) settings

@@ -158,7 +158,6 @@ let g:netrw_browsex_viewer="setsid xdg-open"
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-surround'
 Plug 'vimwiki/vimwiki'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -185,6 +184,7 @@ let g:lsc_hover_popup = v:false
 let g:lsc_enable_diagnostics = v:false          " let ale do the linting
 let g:lsc_server_commands = {
             \'python': 'jedi-language-server',
+            \'r':['R', '--slave', '-e', 'languageserver::run()'],
             \}
 " Note: for list of language servers, see....
 " https://github.com/neovim/nvim-lspconfig#jedi_language_server
@@ -310,7 +310,9 @@ let wiki_3 = {
   \ 'template_default': 'default',
   \ 'template_ext': '.html'}
 
-" let g:vimwiki_global_ext = 0  " turn off temporary wiki behaviour
+let g:vimwiki_list = [wiki_1, wiki_2, wiki_3]
+
+let g:vimwiki_global_ext = 0  " turn off temporary wiki behaviour
 let g:vimwiki_auto_header = 1  " auto fill .wiki title
 let g:vimwiki_folding = 'list'
 
@@ -336,6 +338,7 @@ augroup End
 augroup Filetype r
     au!
     au Filetype r setlocal colorcolumn=80
+    command Style exec "!R --slave -e 'library(styler); style_file(\"%:p\")'"
 augroup END
 
 augroup FileType python 

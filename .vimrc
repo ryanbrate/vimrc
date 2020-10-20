@@ -15,9 +15,6 @@ let mapleader = ","
 let @f="a=expand('%:r')" 
 let @t='a=strftime("%c")'   " using the expression (=) register to evaluate 
 
-" abbreviations global
-cabbrev vg vimgrep
-  
 " highlight those words that tend to get miss-typed
 let s:mistakes = ["its", "it's", 
             \"there", "their", "they're",
@@ -48,11 +45,9 @@ nnoremap <Leader>7 7gt
 nnoremap <Leader>8 8gt
 nnoremap <Leader>9 9gt 
 
-"paste current file name
-"
 "Gvim font
 if has('gui_running')
-    set guifont=Ubuntu\ Mono\ 12
+    set guifont=Ubuntu\ Mono\ 11
 endif
 
 " turn off beep
@@ -76,7 +71,7 @@ syntax enable
 let python_highlight_all=1
 
 " show line numbers
-set nu relativenumber
+set nu 
 
 " set tabs to 4 spaces
 set ts=4
@@ -107,12 +102,16 @@ set hlsearch            " highlight matches
 set laststatus=2                       " Shows status bar on 2nd to last line
 set statusline=%f                      " Show path in status bar (relative, %F for absolute)
 
-set path=.,,
+set path=.,
 " set path+=** "for recursive file searching using :find 
 set wildmenu "tab completion of file search
-set wildmode=longest:full,full
-set wildignore+=tags,*.pyc "invisible to wildmenu and netrw
+set wildmode=list,full
+set wildignore+=*.swp,*.bak
+set wildignore+=*.pyc
 set wildignore+=*.blg,*.fls,*.bbl,*.aux,*fdb_latexmk,*.pygtex,*.pygstyle
+set wildignore+=*/.git/**/*
+set wildignore+=tags
+set wildignorecase
 
 set foldmethod=indent
 set foldlevelstart=1000
@@ -132,7 +131,6 @@ inoremap <C-Space> <C-x><C-u>
 
 " for spell checking i.e. set spell
 set spelllang=en_gb
-" set spelllang=~/.vim/british-english.utf-8.spl  " mksp ~/.vim/british-english /usr/share/dict/british-english
 
 "open preview below
 set splitbelow
@@ -183,9 +181,9 @@ nnoremap <Leader>gl :Git log --oneline --graph --all --decorate<CR>
 let g:lsc_hover_popup = v:false
 let g:lsc_enable_diagnostics = v:false          " let ale do the linting
 let g:lsc_server_commands = {
-            \'python': 'jedi-language-server',
-            \'r':['R', '--slave', '-e', 'languageserver::run()'],
-            \}
+    \'python': 'jedi-language-server',
+    \'r':['R', '--slave', '-e', 'languageserver::run()'],
+    \}
 " Note: for list of language servers, see....
 " https://github.com/neovim/nvim-lspconfig#jedi_language_server
 
@@ -312,7 +310,7 @@ let wiki_3 = {
 
 let g:vimwiki_list = [wiki_1, wiki_2, wiki_3]
 
-let g:vimwiki_global_ext = 0  " turn off temporary wiki behaviour
+" let g:vimwiki_global_ext = 0  " turn off temporary wiki behaviour
 let g:vimwiki_auto_header = 1  " auto fill .wiki title
 let g:vimwiki_folding = 'list'
 
@@ -323,8 +321,8 @@ cabbrev VWST VimwikiSearchTags
 " ------
 " set basic colorscheme
 set termguicolors
-" set background=light
-colorscheme solarized8
+set background=dark
+colorscheme gruvbox
 
 "---
 " new buffer (doc) settings
@@ -338,7 +336,7 @@ augroup End
 augroup Filetype r
     au!
     au Filetype r setlocal colorcolumn=80
-    command Style exec "!R --slave -e 'library(styler); style_file(\"%:p\")'"
+    command Styler exec "!R --slave -e 'library(styler); style_file(\"%:p\")'"
 augroup END
 
 augroup FileType python 
@@ -361,16 +359,16 @@ augroup FileType tex
     au FileType tex :setlocal spell
 
     "wrap token (or visual select) with \textbf{}
-    au Filetype tex nnoremap <buffer> ,tb :normal ciw\textbf{<esc>pa}<esc>
-    au Filetype tex vnoremap <buffer> ,tb :normal gvc\textbf{<esc>pa}<esc>
+    au Filetype tex nnoremap <buffer> <Leader>tb :normal ciw\textbf{<esc>pa}<esc>
+    au Filetype tex vnoremap <buffer> <Leader>tb :normal gvc\textbf{<esc>pa}<esc>
 
     "wrap token (or visual select) with \textit{}
-    au Filetype tex nnoremap <buffer> ,ti :normal ciw\textit{<esc>pa}<esc>
-    au Filetype tex vnoremap <buffer> ,ti :normal gvc\textit{<esc>pa}<esc>
+    au Filetype tex nnoremap <buffer> <Leader>ti :normal ciw\textit{<esc>pa}<esc>
+    au Filetype tex vnoremap <buffer> <Leader>ti :normal gvc\textit{<esc>pa}<esc>
 
     "wrap token (or visual select) with \underline{}
-    au Filetype tex nnoremap <buffer> ,tu :normal ciw\underline{<esc>pa}<esc>
-    au Filetype tex vnoremap <buffer> ,tu :normal gvc\underline{<esc>pa}<esc>
+    au Filetype tex nnoremap <buffer> <Leader>tu :normal ciw\underline{<esc>pa}<esc>
+    au Filetype tex vnoremap <buffer> <Leader>tu :normal gvc\underline{<esc>pa}<esc>
 
 augroup END
 
@@ -378,16 +376,13 @@ augroup END
 augroup FileType email
     au!
     au Filetype email iabbrev <buffer> sig Kind regards,<cr><cr>Ryan
-
     au FileType email :setlocal spell
-    
     au FileType email match ErrorMsg /\(\<\w\+\>\)\_s*\<\1\>/
 
 augroup END
 
 augroup FileType vimwiki
     au!
-
     au FileType vimwiki iabbrev <buffer> uva UvA 
     au FileType vimwiki iabbrev <buffer> eg e.g.,
     au FileType vimwiki iabbrev <buffer> Eg E.g.,
@@ -396,14 +391,17 @@ augroup FileType vimwiki
     au Filetype vimwiki iabbrev <buffer> etc etc.
 
     au FileType vimwiki :setlocal spell
-    " setlocal nospell 
+    au FileType vimwiki :set complete+=k
 
     "make text or visual selection bold
-    au Filetype vimwiki nnoremap <buffer> ,tb :normal ciw**<esc>P
-    au Filetype vimwiki vnoremap <buffer> ,tb :normal gvc**<esc>P
+    au Filetype vimwiki nnoremap <buffer> <Leader>tb :normal ciw**<esc>P
+    au Filetype vimwiki vnoremap <buffer> <Leader>tb :normal gvc**<esc>P
 
     "make text or visual selection italic
-    au Filetype vimwiki nnoremap <buffer> ,ti :normal ciw__<esc>P
-    au Filetype vimwiki vnoremap <buffer> ,ti :normal gvc__<esc>P
+    au Filetype vimwiki nnoremap <buffer> <Leader>ti :normal ciw__<esc>P
+    au Filetype vimwiki vnoremap <buffer> <Leader>ti :normal gvc__<esc>P
+
+    "added operator-pending mapping for headings"
+    au Filetype vimwiki onoremap i= :<c-u>normal! T=vt=<cr>
 
 augroup END

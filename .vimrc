@@ -404,16 +404,23 @@ augroup FileType vimwiki
     "added operator-pending mapping for headings"
     au Filetype vimwiki onoremap i= :<c-u>normal! T=vt=<cr> 
     
-    " add a function to find open 
+    " add a function/command to find incomplete lists by tags
     function Todopen(...) abort
-        echo a:1
+        " Find incomplete ToDo lists associated with a :tag:
+        " Args:
+        "   tag (string): (optional) the tag
+        " Executes: VWS wrt. tag if specified, otherwise all incomplete tags
+        " in the wiki
+        echom a:1
         if a:0 == 0
-            call VWS /\[\s\+\]/
+            exec 'VWS \[\s\+\]'
         elseif a:0 == 1
             let l:tag = a:1
             exec 'VWS /:' . l:tag . ':\_.\+\[\s\+\]/'
         endif
     endfunction
-    command! -buffer -nargs=1 -complete=custom,vimwiki#tags#complete_tags -bang Topen execute Todopen(<q-args>) 
+    au FileType vimwiki 
+                \command! -buffer -nargs=? -complete=custom,vimwiki#tags#complete_tags -bang 
+                \TD execute Todopen(<q-args>) 
 
 augroup END

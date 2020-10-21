@@ -71,7 +71,7 @@ syntax enable
 let python_highlight_all=1
 
 " show line numbers
-set nu 
+set nu relativenumber
 
 " set tabs to 4 spaces
 set ts=4
@@ -314,8 +314,6 @@ let g:vimwiki_list = [wiki_1, wiki_2, wiki_3]
 let g:vimwiki_auto_header = 1  " auto fill .wiki title
 let g:vimwiki_folding = 'list'
 
-cabbrev VWST VimwikiSearchTags
-
 " ------
 "  colorscheme
 " ------
@@ -390,6 +388,8 @@ augroup FileType vimwiki
     au Filetype vimwiki iabbrev <buffer> Ie I.e.,
     au Filetype vimwiki iabbrev <buffer> etc etc.
 
+    au FileType vimwiki cabbrev VWST VimwikiSearchTags
+
     au FileType vimwiki :setlocal spell
     au FileType vimwiki :set complete+=k
 
@@ -402,6 +402,18 @@ augroup FileType vimwiki
     au Filetype vimwiki vnoremap <buffer> <Leader>ti :normal gvc__<esc>P
 
     "added operator-pending mapping for headings"
-    au Filetype vimwiki onoremap i= :<c-u>normal! T=vt=<cr>
+    au Filetype vimwiki onoremap i= :<c-u>normal! T=vt=<cr> 
+    
+    " add a function to find open 
+    function Todopen(...) abort
+        echo a:1
+        if a:0 == 0
+            call VWS /\[\s\+\]/
+        elseif a:0 == 1
+            let l:tag = a:1
+            exec 'VWS /:' . l:tag . ':\_.\+\[\s\+\]/'
+        endif
+    endfunction
+    command! -buffer -nargs=1 -complete=custom,vimwiki#tags#complete_tags -bang Topen execute Todopen(<q-args>) 
 
 augroup END

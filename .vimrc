@@ -374,7 +374,7 @@ augroup END
 augroup FileType email
     au!
     au Filetype email iabbrev <buffer> sig Kind regards,<cr><cr>Ryan
-    au FileType email :setlocal spell
+    au FileType email setlocal spell
     au FileType email match ErrorMsg /\(\<\w\+\>\)\_s*\<\1\>/
 
 augroup END
@@ -390,37 +390,40 @@ augroup FileType vimwiki
 
     au FileType vimwiki cabbrev VWST VimwikiSearchTags
 
-    au FileType vimwiki :setlocal spell
-    au FileType vimwiki :set complete+=k
+    au FileType vimwiki setlocal spell
+    au FileType vimwiki set complete+=k
 
-    "make text or visual selection bold
+    " make text or visual selection bold
     au Filetype vimwiki nnoremap <buffer> <Leader>tb :normal ciw**<esc>P
     au Filetype vimwiki vnoremap <buffer> <Leader>tb :normal gvc**<esc>P
 
-    "make text or visual selection italic
+    " make text or visual selection italic
     au Filetype vimwiki nnoremap <buffer> <Leader>ti :normal ciw__<esc>P
     au Filetype vimwiki vnoremap <buffer> <Leader>ti :normal gvc__<esc>P
 
-    "added operator-pending mapping for headings"
+    " added operator-pending mapping for headings
     au Filetype vimwiki onoremap i= :<c-u>normal! T=vt=<cr> 
+
+    " added operator-pending mapping for VimwikiTable cells
+    au Filetype vimwiki onoremap ic :<c-u>normal! T|vt|<cr> 
     
     " add a function/command to find incomplete lists by tags
     function Todopen(...) abort
         " Find incomplete ToDo lists associated with a :tag:
         " Args:
-        "   tag (string): (optional) the tag
-        " Executes: VWS wrt. tag if specified, otherwise all incomplete tags
-        " in the wiki
-        echom a:1
-        if a:0 == 0
-            exec 'VWS \[\s\+\]'
-        elseif a:0 == 1
-            let l:tag = a:1
-            exec 'VWS /:' . l:tag . ':\_.\+\[\s\+\]/'
+        "   tag (string): (optional)
+        if a:0 == 0  " no tag
+            exec 'VWS /\[\s\+\]/'
+        else
+            if a:1 == ''  " no tag
+                exec 'VWS /\[\s\+\]/'
+            else
+                let l:tag = a:1
+                exec 'VWS /:' . l:tag . ':\_.\+\[\s\+\]/'
+            endif
         endif
     endfunction
     au FileType vimwiki 
                 \command! -buffer -nargs=? -complete=custom,vimwiki#tags#complete_tags -bang 
                 \TD execute Todopen(<q-args>) 
-
 augroup END

@@ -173,7 +173,9 @@ call plug#end()
 "------
 " fugitive
 "------
-nnoremap <Leader>gl :Git log --oneline --graph --all --decorate<CR>
+if exists('g:loaded_fugitive')
+    nnoremap <Leader>gl :Git log --oneline --graph --all --decorate<CR>
+endif
 
 "------
 " vim-lsc
@@ -258,6 +260,7 @@ let g:UltiSnipsEditSplit="vertical"
 "------
 " vimtex
 "------
+
 map <Leader>ll :VimtexCompile <cr><cr>
 map <Leader>le :VimtexTocToggle<cr><cr>
 let g:vimtex_compiler_latexmk = {
@@ -334,7 +337,8 @@ augroup End
 augroup Filetype r
     au!
     au Filetype r setlocal colorcolumn=80
-    command Styler exec "!R --slave -e 'library(styler); style_file(\"%:p\")'"
+    au Filetype r command Styler exec 
+                \"!R --slave -e 'library(styler); style_file(\"%:p\")'"
 augroup END
 
 augroup FileType python 
@@ -406,7 +410,9 @@ augroup FileType vimwiki
     au Filetype vimwiki onoremap i= :<c-u>normal! T=vt=<cr> 
 
     " ----
-    " Add a command to populate a location list by 0,1 or more tags.
+    " Add a command to populate a location list by 0,1 or more vimwiki tags,
+    " matching incomplete ToDo lists preceeded by the tags (or any page if tag
+    " not specified)
     " ----
     " Example:
     "

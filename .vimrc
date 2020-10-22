@@ -405,14 +405,18 @@ augroup FileType vimwiki
     " added operator-pending mapping for headings
     au Filetype vimwiki onoremap i= :<c-u>normal! T=vt=<cr> 
 
-    " add a function/command to find incomplete lists by tags
-    function Todopen(...) abort
-        " Find incomplete ToDo lists associated with a :tag:
+    " ----
+    " Add a command to populate a location list by 0,1 or more tags.
+    " ----
+    " Example:
+    "
+    "   :TD
+    "   :TD tag1 tag2
+    
+    function g:Todopen(...) abort
         " Args:
-        "   tags (string): space separated tags
+        "   a000: (string): \s\+ separated tags
 
-        " handle multiple input tags. e.g., :TD tag1 tag2 -> l:tags = ['tag1',
-        " 'tag2], or zero tags: l:tags=[]
         let l:tags = split(a:1, '\s\+')
 
         if len(tags) == 0

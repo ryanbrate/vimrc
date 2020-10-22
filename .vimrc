@@ -312,7 +312,7 @@ let g:vimwiki_list = [wiki_1, wiki_2, wiki_3]
 
 " let g:vimwiki_global_ext = 0  " turn off temporary wiki behaviour
 let g:vimwiki_auto_header = 1  " auto fill .wiki title
-let g:vimwiki_folding = 'list'
+" let g:vimwiki_folding = 'list'  "turn off - it's too slow
 
 " ------
 "  colorscheme
@@ -381,6 +381,7 @@ augroup END
 
 augroup FileType vimwiki
     au!
+
     au FileType vimwiki iabbrev <buffer> uva UvA 
     au FileType vimwiki iabbrev <buffer> eg e.g.,
     au FileType vimwiki iabbrev <buffer> Eg E.g.,
@@ -404,23 +405,20 @@ augroup FileType vimwiki
     " added operator-pending mapping for headings
     au Filetype vimwiki onoremap i= :<c-u>normal! T=vt=<cr> 
 
-    " added operator-pending mapping for VimwikiTable cells
-    au Filetype vimwiki onoremap ic :<c-u>normal! T|vt|<cr> 
-    
     " add a function/command to find incomplete lists by tags
     function Todopen(...) abort
         " Find incomplete ToDo lists associated with a :tag:
         " Args:
-        "   tag (string): (optional)
-        if a:0 == 0  " no tag
+        "   tags (string): space separated tags
+
+        " handle multiple input tags. e.g., :TD tag1 tag2 -> l:tags = ['tag1',
+        " 'tag2], or zero tags: l:tags=[]
+        let l:tags = split(a:1, '\s\+')
+
+        if len(tags) == 0
             exec 'VWS /\[\s\+\]/'
-        else
-            if a:1 == ''  " no tag
-                exec 'VWS /\[\s\+\]/'
-            else
-                let l:tag = a:1
-                exec 'VWS /:' . l:tag . ':\_.\+\[\s\+\]/'
-            endif
+        else  " search for 1 or more tags simultaneously
+            exec 'VWS /:\(' . join(tags, '\|') . '\):\_.\+\[\s\+\]/'
         endif
     endfunction
     au FileType vimwiki 

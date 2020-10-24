@@ -99,8 +99,10 @@ set incsearch           " search as characters are entered
 set hlsearch            " highlight matches
 
 "statusbar
-set laststatus=2                       " Shows status bar on 2nd to last line
-set statusline=%f                      " Show path in status bar (relative, %F for absolute)
+set laststatus=2        " Shows status bar on 2nd to last line
+set statusline=%f\ %y\ [%{&fileencoding?&fileencoding:&encoding}]\ [%{&fileformat}]  "lhs 
+set statusline+=%=
+set statusline+=%p%%\ %l:%c  "rhs
 
 set path=.,
 " set path+=** "for recursive file searching using :find 
@@ -157,6 +159,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-unimpaired'
 Plug 'vimwiki/vimwiki'
+Plug 'mattn/calendar-vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'tpope/vim-fugitive'
@@ -167,7 +170,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'natebosch/vim-lsc'
-Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline'
 call plug#end()
 
 "------
@@ -313,7 +316,7 @@ let wiki_3 = {
 
 let g:vimwiki_list = [wiki_1, wiki_2, wiki_3]
 
-" let g:vimwiki_global_ext = 0  " turn off temporary wiki behaviour
+" let g:vimwiki_global_ext = 0  " turns off temporary wiki behaviour
 let g:vimwiki_auto_header = 1  " auto fill .wiki title
 " let g:vimwiki_folding = 'list'  "turn off - it's too slow
 
@@ -331,7 +334,11 @@ colorscheme gruvbox
 augroup FileType *
     au!
     au FileType * match none "clear previous highlighted matches in new buffer
+augroup End
 
+augroup FileType vim
+    au!
+    au FileType vim setlocal colorcolumn=80
 augroup End
 
 augroup Filetype r
@@ -344,7 +351,6 @@ augroup END
 augroup FileType python 
     au!
     au FileType python setlocal colorcolumn=80
-    au FileType python setlocal completefunc = "lsc#complete#complete"
 augroup END
 
 augroup FileType tex

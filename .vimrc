@@ -10,28 +10,41 @@ set smartcase
 "change the leader key
 let mapleader = ","
 
+"------
 "macros assigned to registers
+"------
+
 " let @s="1:w >> removed_line.txt\<CR>d1d"
 let @f="a=expand('%:r')" 
 let @t='a=strftime("%c")'   " using the expression (=) register to evaluate 
+
+"------
+" custom commands
+"------
+
+" eval() any line of text, echoing the result
+command EE echo eval(getline('.'))
 
 " highlight those words that tend to get miss-typed
 let s:mistakes = ["its", "it's", 
             \"there", "their", "they're",
             \"your", "you're",
             \"were", "we're", "where", 
+            \"who's", "whose",
             \]
 command Mistakes exec '/\(' . join(s:mistakes, '\|') . '\)' 
 
 " highlight (likely unintended) repeated consecutive words
 command RepeatedWords /\(\<\w\+\>\)\_s*\<\1\>
 
+" ------
+" miscellaneous settings
+" ------
+
 " always shows tab bar
 set showtabline=2
 
-"---
 " Tab creation/deletion/navigation
-"---
 nnoremap <Leader>tn :tabnew<CR>
 nnoremap <Leader>tc :tabclose<CR>
 
@@ -129,7 +142,7 @@ set omnifunc=syntaxcomplete#Complete
 set completefunc=syntaxcomplete#Complete
 set completeopt=menuone,preview,noselect,noinsert
 set dictionary+=/usr/share/dict/british-english "setup dictionary completion
-inoremap <C-Space> <C-x><C-u>
+inoremap <C-Space> <C-x><C-o>
 
 " for spell checking i.e. set spell
 set spelllang=en_gb
@@ -170,15 +183,19 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'natebosch/vim-lsc'
-" Plug 'vim-airline/vim-airline'
+Plug 'ryanbrate/functional.vim'
+Plug 'ryanbrate/vimwiki_block_runner.vim', {'branch':'master'}
 call plug#end()
+
+"------
+" vimwiki_block_runner.vim
+"------
+let g:vwbr_commands = {'python':'python3 %s'}
 
 "------
 " fugitive
 "------
-if exists('g:loaded_fugitive')
-    nnoremap <Leader>gl :Git log --oneline --graph --all --decorate<CR>
-endif
+nnoremap <Leader>gl :Git log --oneline --graph --all --decorate<CR>
 
 "------
 " vim-lsc
@@ -215,7 +232,7 @@ let g:lsc_auto_map = {
     \ 'DocumentSymbol': 'go',
     \ 'WorkspaceSymbol': 'gS',
     \ 'SignatureHelp': 'gm',
-    \ 'Completion': 'completefunc',
+    \ 'Completion': 'omnifunc',
     \}
 
 "------
@@ -329,11 +346,22 @@ set background=dark
 colorscheme gruvbox
 
 "---
+" General operator-pending mappings
+"---
+
+" items between commas (i.e., lists)
+onoremap i, :<c-u>normal! T,wvt,<cr>
+onoremap a, :<c-u>normal! T,wvf,wh<cr> 
+
+"---
 " new buffer (doc) settings
 "---
+
 augroup FileType *
     au!
     au FileType * match none "clear previous highlighted matches in new buffer
+
+    " added operator-pending mapping for items in between commas
 augroup End
 
 augroup FileType vim
@@ -427,7 +455,7 @@ augroup FileType vimwiki
     
     function g:Todopen(...) abort
         " Args:
-        "   a000: (string): \s\+ separated tags
+        "   a000: (list): \s\+ separated tags
 
         let l:tags = split(a:1, '\s\+')
 
@@ -437,7 +465,11 @@ augroup FileType vimwiki
             exec 'VWS /:\(' . join(tags, '\|') . '\):\_.\+\[\s\+\]/'
         endif
     endfunction
+
     au FileType vimwiki 
                 \command! -buffer -nargs=? -complete=custom,vimwiki#tags#complete_tags -bang 
                 \TD execute Todopen(<q-args>) 
+
+    " vimwiki_block_runner
+    au Filetype vimwiki nnoremap <buffer> <Leader>wb :call Execute_Block()<CR><CR>
 augroup END

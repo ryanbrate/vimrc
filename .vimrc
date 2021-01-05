@@ -1,3 +1,8 @@
+# turn off macvim + touch bar full screen icon
+if has('gui_macvim')
+    let g:macvim_default_touchbar_fullscreen=0
+endif
+
 set encoding=utf-8
 
 "set (buffer) working path to current file location
@@ -60,7 +65,11 @@ nnoremap <Leader>9 9gt
 
 "Gvim font
 if has('gui_running')
-    set guifont=Ubuntu\ Mono\ 11
+    if has('gui_macvim')
+        set guifont=Monaco:h13
+    else
+        set guifont=Ubuntu\ Mono\ 11
+    endif
 endif
 
 " turn off beep

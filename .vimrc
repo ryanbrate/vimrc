@@ -31,13 +31,13 @@ let @t='a=strftime("%c")'   " using the expression (=) register to evaluate
 command EE echo eval(getline('.'))
 
 " highlight those words that tend to get miss-typed
-let s:mistakes = ["its", "it's", 
+let s:hom = ["its", "it's", 
             \"there", "their", "they're",
             \"your", "you're",
             \"were", "we're", "where", 
             \"who's", "whose",
             \]
-command Mistakes exec '/\(' . join(s:mistakes, '\|') . '\)' 
+command Hom exec '/\(' . join(s:mistakes, '\|') . '\)' 
 
 " highlight (likely unintended) repeated consecutive words
 command RepeatedWords /\(\<\w\+\>\)\_s*\<\1\>

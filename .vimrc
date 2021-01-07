@@ -1,4 +1,4 @@
-# turn off macvim + touch bar full screen icon
+" turn off macvim + touch bar full screen icon
 if has('gui_macvim')
     let g:macvim_default_touchbar_fullscreen=0
 endif

@@ -190,7 +190,11 @@ call plug#end()
 "------
 " vimwiki_block_runner.vim
 "------
-let g:vwbr_commands = {'python':'python3 %s'}
+let g:vwbr_commands = {
+            \'python':'python3 %s',
+            \'R':'Rscript %s',
+            \'r':'Rscript %s',
+            \}
 
 "------
 " fugitive

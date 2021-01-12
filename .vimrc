@@ -1,4 +1,4 @@
-" turn off macvim + touch bar full screen icon
+" turn off macvim touch bar full screen icon
 if has('gui_macvim')
     let g:macvim_default_touchbar_fullscreen=0
 endif
@@ -325,12 +325,12 @@ let wiki_1 = {
   \ 'template_ext': '.html'}
 
 let wiki_2 = {
-  \ 'path': '$HOME/Diary',
+  \ 'path': '$HOME/vimwiki_old',
   \ 'auto_tags': 1,
   \ 'auto_diary_index': 1,
   \ 'auto_generate_tags': 1,
   \ 'auto_export': 1,
-  \ 'template_path': '$HOME/Diary/templates',
+  \ 'template_path': '$HOME/vimwiki_old/templates',
   \ 'template_default': 'default',
   \ 'template_ext': '.html'}
 

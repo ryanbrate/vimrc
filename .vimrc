@@ -37,7 +37,7 @@ let s:hom = ["its", "it's",
             \"were", "we're", "where", 
             \"who's", "whose",
             \]
-command Hom exec '/\(' . join(s:mistakes, '\|') . '\)' 
+command Hom exec '/\(' . join(s:hom, '\|') . '\)' 
 
 " highlight (likely unintended) repeated consecutive words
 command RepeatedWords /\(\<\w\+\>\)\_s*\<\1\>
